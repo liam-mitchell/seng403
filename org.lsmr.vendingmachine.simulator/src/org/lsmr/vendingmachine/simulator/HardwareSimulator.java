@@ -58,6 +58,8 @@ public class HardwareSimulator {
     private DisplaySimulator display;
     private SelectionButtonSimulator[] buttons;
     private IndicatorLightSimulator exactChangeLight, outOfOrderLight;
+    
+    private MoneyManager moneyManager;
 
     protected static int deliveryChuteCapacity = 20;
     protected static int coinReceptableCapacity = 50;
@@ -124,6 +126,8 @@ public class HardwareSimulator {
 
 	exactChangeLight = new IndicatorLightSimulator();
 	outOfOrderLight = new IndicatorLightSimulator();
+	
+	moneyManager = new MoneyManager(this);
     }
 
     /**
@@ -283,4 +287,27 @@ public class HardwareSimulator {
     public DisplaySimulator getDisplay() {
 	return display;
     }
+
+	public MoneyManager getMoneyManager() {
+		return moneyManager;
+	}
+
+	public void setMoneyManager(MoneyManager moneyManager) {
+		this.moneyManager = moneyManager;
+	}
+	
+	public static void main(String [] args) {
+		try {	
+			int [] coinValues = { 5, 10, 25, 100, 200 };
+			int [] popCosts = { 100, 100, 100 };
+			String [] popNames = { "Coke", "Pepsi", "7-up" };
+			HardwareSimulator hw = new HardwareSimulator(coinValues, popCosts, popNames);
+			DisplaySimulator disp = hw.getDisplay();
+
+			System.out.println(disp.getMessage());
+			hw.getCoinSlot().addCoin(new Coin(100));
+			System.out.println(disp.getMessage());
+
+		} catch (Exception e) { /* gotta catch em all */ }
+	}
 }

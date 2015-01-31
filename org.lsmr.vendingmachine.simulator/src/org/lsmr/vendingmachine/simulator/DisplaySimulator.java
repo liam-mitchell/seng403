@@ -25,6 +25,10 @@ public class DisplaySimulator extends
     public void loadWithoutEvents(String message) {
 	this.message = message;
     }
+    
+    public String getMessage() {
+    	return message;
+    }
 
     private void notifyMessageChange(String oldMsg, String newMsg) {
 	Class<?>[] parameterTypes =
