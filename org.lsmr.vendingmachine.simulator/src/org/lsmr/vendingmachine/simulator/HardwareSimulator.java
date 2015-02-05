@@ -313,9 +313,23 @@ public class HardwareSimulator {
 			hw.getCoinSlot().addCoin(new Coin(100));
 			System.out.println(disp.getMessage());
 			
-			System.out.println(hw.deliveryChute.hasSpace());
-			hw.buttons[1].press();
+			//-----------
+			
+			System.out.println("Attempting to dispense a pop from index 1 which is empty. Expecting an exception.");
+			hw.buttons[1].press();	//Empty, EmptyException
+			
+			System.out.println("Loading a can of pop into index 1.");
+			PopCan aPop = new PopCan();			//This is a can of pop.
+			hw.getPopCanRack(1).addPop(aPop);	//Load it in.
+			
+			System.out.println("Attempting to dispense a pop from index 0 which is empty. Expecting an exception.");
+			hw.buttons[0].press();				//Should fail.
 
+			System.out.println("Attempting to dispense a pop from index 1 which should now have a pop in it.");
+			hw.buttons[1].press();				//Hopefully it dispenses and is not empty.
+			
+			//--------------
+			
 		} catch (Exception e) { /* gotta catch em all */ }
 	}
 }
