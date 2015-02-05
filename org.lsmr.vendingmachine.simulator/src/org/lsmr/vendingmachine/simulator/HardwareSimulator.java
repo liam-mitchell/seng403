@@ -132,7 +132,7 @@ public class HardwareSimulator {
 	
 	popSelectors = new PopSelector[popNames.length];
 	for(int i = 0; i < popNames.length; i++)				//Make selectors for each button/pop type/pop rack
-		popSelectors[i] = new PopSelector(this, popCanRacks[i], popCosts[i]);	//Connect them to the appropriate rack
+		popSelectors[i] = new PopSelector(this, popCosts[i], i);	//Connect them to the appropriate rack
     }
 
     /**
@@ -312,6 +312,9 @@ public class HardwareSimulator {
 			System.out.println(disp.getMessage());
 			hw.getCoinSlot().addCoin(new Coin(100));
 			System.out.println(disp.getMessage());
+			
+			System.out.println(hw.deliveryChute.hasSpace());
+			hw.buttons[1].press();
 
 		} catch (Exception e) { /* gotta catch em all */ }
 	}

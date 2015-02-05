@@ -5,8 +5,9 @@ public class PopSelector implements SelectionButtonSimulatorListener {
 	private int popCost;
 	private MoneyManager moneyManager;
 
-	public PopSelector(HardwareSimulator hw, PopCanRackSimulator pr, int cost) {
-		connectedPopRack = pr;
+	public PopSelector(HardwareSimulator hw, int cost, int index) {
+		connectedPopRack = hw.getPopCanRack(index);
+		hw.getSelectionButton(index).register(this);
 		popCost = cost;
 		moneyManager = hw.getMoneyManager();
 	}
