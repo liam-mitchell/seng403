@@ -9,7 +9,9 @@ public class MoneyManager implements CoinReceptacleListener {
 	public MoneyManager(HardwareSimulator hw) {
 		hardware = hw;
 		hardware.getCoinReceptacle().register(this);
+		hardware.getStorageBin().register(this);
 		sum = 0;
+		displaySum();
 	}
 	
 	@Override
@@ -26,19 +28,30 @@ public class MoneyManager implements CoinReceptacleListener {
 
 	@Override
 	public void coinAdded(CoinReceptacleSimulator receptacle, Coin coin) {
-		sum += coin.getValue();
-		displaySum();
+		if (isReceptacle(receptacle)) {
+			sum += coin.getValue();
+			displaySum();
+		}
 	}
 
 	@Override
 	public void coinsRemoved(CoinReceptacleSimulator receptacle) {
-		sum = 0;
-		displaySum();
+		if (isReceptacle(receptacle)) {
+			sum = 0;
+			displaySum();
+		}
+		else if (isStorageBin(receptacle)) {
+			if (hardware.getOutOfOrderLight().isActive()) {
+				hardware.getOutOfOrderLight().deactivate();
+			}
+		}
 	}
 
 	@Override
 	public void coinsFull(CoinReceptacleSimulator receptacle) {
-		hardware.getOutOfOrderLight().activate();
+		if (isStorageBin(receptacle)) {
+			hardware.getOutOfOrderLight().activate();
+		}
 	}
 
 	@Override
@@ -60,5 +73,13 @@ public class MoneyManager implements CoinReceptacleListener {
 	private void displaySum() {
 		NumberFormat fmt = NumberFormat.getCurrencyInstance();
 		hardware.getDisplay().display("CURRENT TOTAL: " + fmt.format((float)sum / 100));	
+	}
+	
+	private boolean isReceptacle(CoinReceptacleSimulator receptacle) {
+		return receptacle.equals(hardware.getCoinReceptacle());
+	}
+	
+	private boolean isStorageBin(CoinReceptacleSimulator receptacle) {
+		return receptacle.equals(hardware.getStorageBin());
 	}
 }
