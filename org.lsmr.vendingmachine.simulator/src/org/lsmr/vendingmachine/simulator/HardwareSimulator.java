@@ -60,6 +60,7 @@ public class HardwareSimulator {
     private IndicatorLightSimulator exactChangeLight, outOfOrderLight;
     
     private MoneyManager moneyManager;
+    private PopSelector popSelectors[];
 
     protected static int deliveryChuteCapacity = 20;
     protected static int coinReceptableCapacity = 50;
@@ -128,6 +129,10 @@ public class HardwareSimulator {
 	outOfOrderLight = new IndicatorLightSimulator();
 	
 	moneyManager = new MoneyManager(this);
+	
+	popSelectors = new PopSelector[popNames.length];
+	for(int i = 0; i < popNames.length; i++)				//Make selectors for each button/pop type/pop rack
+		popSelectors[i] = new PopSelector(this, popCosts[i], i);	//Connect them to the appropriate rack
     }
 
     /**
@@ -307,7 +312,24 @@ public class HardwareSimulator {
 			System.out.println(disp.getMessage());
 			hw.getCoinSlot().addCoin(new Coin(100));
 			System.out.println(disp.getMessage());
+			
+			//-----------
+			
+			System.out.println("Attempting to dispense a pop from index 1 which is empty. Expecting an exception.");
+			hw.buttons[1].press();	//Empty, EmptyException
+			
+			System.out.println("Loading a can of pop into index 1.");
+			PopCan aPop = new PopCan();			//This is a can of pop.
+			hw.getPopCanRack(1).addPop(aPop);	//Load it in.
+			
+			System.out.println("Attempting to dispense a pop from index 0 which is empty. Expecting an exception.");
+			hw.buttons[0].press();				//Should fail.
 
+			System.out.println("Attempting to dispense a pop from index 1 which should now have a pop in it.");
+			hw.buttons[1].press();				//Hopefully it dispenses and is not empty.
+			
+			//--------------
+			
 		} catch (Exception e) { /* gotta catch em all */ }
 	}
 }
