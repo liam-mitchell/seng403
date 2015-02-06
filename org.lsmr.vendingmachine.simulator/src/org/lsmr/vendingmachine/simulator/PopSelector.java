@@ -5,14 +5,17 @@ public class PopSelector implements SelectionButtonSimulatorListener {
 	private int popCost;							//Cost of this pop
 	private MoneyManager moneyManager;				//Money manager for knowing if we have enough money
 	private int indexNumber;						//Index number of the PopSelector (and the button and pop rack it is connected to.);
+	private DisplaySimulator disp;
 
 	public PopSelector(HardwareSimulator hw, int cost, int index) {
 		connectedPopRack = hw.getPopCanRack(index);		//Link this to the associated pop rack
 		hw.getSelectionButton(index).register(this);	//Register to appropriate button
+		disp = hw.getDisplay();
 		
 		popCost = cost;									//Cost of this pop
 		moneyManager = hw.getMoneyManager();			//Get the money manager
 		indexNumber = index;							//Set indexNumber
+		disp = hw.getDisplay();							//Get display
 	}
 	
 	//Default constructor
@@ -53,11 +56,28 @@ public class PopSelector implements SelectionButtonSimulatorListener {
 				// TODO Auto-generated catch block
 				System.out.println("EmptyException in PopSelector while dispensing pop from index " + indexNumber);
 				e.printStackTrace();
+				
+				String oldMessage = disp.getMessage();	//Save old message
+				disp.display("OUT OF STOCK");		//Display an out of stock message
+				System.out.println(disp.getMessage());
+				
+				try {	//Wait for 5 seconds
+					Thread.sleep(5000);
+				}
+				catch (Exception eb) {/*Catch all*/}
+				
+				disp.display(oldMessage);		//Restore old message
+				System.out.println(disp.getMessage());
+				
 			} catch (CapacityExceededException e) {
 				// TODO Auto-generated catch block
 				System.out.println("CapacityExceededException in PopSelector while dispensing pop from index " + indexNumber);
 				e.printStackTrace();
 			}
+		}
+		else
+		{
+			System.out.println("Insufficient coins for pop.");
 		}
 		
 	}
