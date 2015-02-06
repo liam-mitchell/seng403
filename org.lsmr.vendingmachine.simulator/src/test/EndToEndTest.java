@@ -16,6 +16,10 @@ import org.lsmr.vendingmachine.simulator.CapacityExceededException;
 public class EndToEndTest {
 	private HardwareSimulator hardware;
 
+	private static final int [] coinValues = { 5, 10, 25, 100, 200 };
+	private static final int [] popCosts = { 100, 100, 100 };
+	private static final String [] popNames = { "Coke", "Pepsi", "7-up" };
+
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 	}
@@ -26,10 +30,6 @@ public class EndToEndTest {
 
 	@Before
 	public void setUp() throws Exception {
-		int [] coinValues = { 5, 10, 25, 100, 200 };
-		int [] popCosts = { 100, 100, 100 };
-		String [] popNames = { "Coke", "Pepsi", "7-up" };
-
 		hardware = new HardwareSimulator(coinValues, popCosts, popNames);
 	}
 
@@ -96,4 +96,20 @@ public class EndToEndTest {
 		
 		assertEquals(hardware.getDisplay().getMessage(), "CURRENT TOTAL: $0.00");
 	}
+	
+	@Test
+	public void testDisplayErrorWhenNoPop()
+			throws DisabledException, CapacityExceededException
+	{
+		hardware = new MockHardwareSimulator(coinValues, popCosts, popNames);
+		
+		hardware.getCoinSlot().addCoin(new Coin(100));
+		hardware.getSelectionButton(1).press();
+		
+		String log = ((MockDisplay)hardware.getDisplay()).getLog();
+		System.out.println("DISPLAY LOG: " + log);
+		
+		assertTrue(log.contains("OUT OF STOCK"));
+	}
+
 }

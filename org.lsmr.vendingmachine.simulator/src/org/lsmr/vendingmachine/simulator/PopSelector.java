@@ -6,8 +6,10 @@ public class PopSelector implements SelectionButtonSimulatorListener {
 	private MoneyManager moneyManager;				//Money manager for knowing if we have enough money
 	private int indexNumber;						//Index number of the PopSelector (and the button and pop rack it is connected to.);
 	private DisplaySimulator disp;
+	private HardwareSimulator hardware;
 
 	public PopSelector(HardwareSimulator hw, int cost, int index) {
+		hardware = hw;
 		connectedPopRack = hw.getPopCanRack(index);		//Link this to the associated pop rack
 		hw.getSelectionButton(index).register(this);	//Register to appropriate button
 		disp = hw.getDisplay();
@@ -40,6 +42,7 @@ public class PopSelector implements SelectionButtonSimulatorListener {
 
 	@Override
 	public void pressed(SelectionButtonSimulator button) {
+		disp = hardware.getDisplay();
 		// TODO Auto-generated method stub
 		
 		if (moneyManager.getSum() >= popCost)	//Check if we have enough money
@@ -55,7 +58,7 @@ public class PopSelector implements SelectionButtonSimulatorListener {
 			} catch (EmptyException e) {
 				// TODO Auto-generated catch block
 				System.out.println("EmptyException in PopSelector while dispensing pop from index " + indexNumber);
-				e.printStackTrace();
+				//e.printStackTrace();
 				
 				String oldMessage = disp.getMessage();	//Save old message
 				disp.display("OUT OF STOCK");		//Display an out of stock message

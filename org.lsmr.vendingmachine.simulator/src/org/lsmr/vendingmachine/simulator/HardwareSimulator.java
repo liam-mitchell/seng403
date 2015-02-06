@@ -63,7 +63,7 @@ public class HardwareSimulator {
     private ExactChangeManager exactChangeManager;
     private PopSelector popSelectors[];
 
-    private MoneyDelivery moneyDelivery[];
+    //private MoneyDelivery moneyDelivery[];
 
     private int[] popCost;
     private int[] coinValue;
@@ -139,9 +139,10 @@ public class HardwareSimulator {
 	
 	moneyManager = new MoneyManager(this);
 
-        moneyDelivery = new MoneyDelivery[popNames.length];
-	for(int i = 0; i < popNames.length; i++)				//Make selectors for each button/pop type/pop rack
-		popSelectors[i] = new PopSelector(this, popCosts[i], i);	//Connect them to the appropriate rack
+        //moneyDelivery = new MoneyDelivery[popNames.length];
+	//popSelectors = new PopSelector[popNames.length];
+	//for(int i = 0; i < popNames.length; i++)				//Make selectors for each button/pop type/pop rack
+		//popSelectors[i] = new PopSelector(this, popCosts[i], i);	//Connect them to the appropriate rack
     
 	exactChangeManager = new ExactChangeManager(this);
 	
@@ -330,6 +331,10 @@ public class HardwareSimulator {
 	
 	public int[] getCoinValues(){
 		return coinValue;
+	}
+	
+	protected void setDisplay(DisplaySimulator d) {
+		display = d;
 	}
 	
 	public static void main(String [] args) {
