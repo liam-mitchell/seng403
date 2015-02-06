@@ -55,17 +55,19 @@ public class PopSelector implements SelectionButtonSimulatorListener {
 			} catch (EmptyException e) {
 				// TODO Auto-generated catch block
 				System.out.println("EmptyException in PopSelector while dispensing pop from index " + indexNumber);
+				e.printStackTrace();
 				
 				String oldMessage = disp.getMessage();	//Save old message
 				disp.display("OUT OF STOCK");		//Display an out of stock message
+				System.out.println(disp.getMessage());
 				
 				try {	//Wait for 5 seconds
 					Thread.sleep(5000);
-					e.printStackTrace();
 				}
 				catch (Exception eb) {/*Catch all*/}
 				
 				disp.display(oldMessage);		//Restore old message
+				System.out.println(disp.getMessage());
 				
 			} catch (CapacityExceededException e) {
 				// TODO Auto-generated catch block
