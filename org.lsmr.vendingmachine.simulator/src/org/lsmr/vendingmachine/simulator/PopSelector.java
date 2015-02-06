@@ -93,7 +93,7 @@ public class PopSelector implements SelectionButtonSimulatorListener {
 			
 			String oldMessage = disp.getMessage();								//Save old message
 			
-			disp.display("$" + Double.toString(( (double)popCost ) / 100) );	//Display price of pop
+			disp.display("Insufficient funds [REQUIRED: $" + Double.toString(( (double)popCost ) / 100) + "]");	//Display price of pop
 			
 			try {	//Wait for 4 seconds
 				Thread.sleep(4000);

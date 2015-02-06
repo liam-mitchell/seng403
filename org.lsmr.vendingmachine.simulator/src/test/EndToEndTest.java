@@ -63,19 +63,6 @@ public class EndToEndTest {
 	}
 	
 	@Test
-	public void testOutOfOrderWhenFull() throws DisabledException {
-		// Buy ten pops to fill the storage bin (capacity 1000)
-		for (int i = 0; i < 1000; ++i) {
-			hardware.getCoinSlot().addCoin(new Coin(1));
-			if (i % 100 == 0) {
-				hardware.getSelectionButton(1).press();
-			}
-		}
-		
-		assertEquals(hardware.getOutOfOrderLight().isActive(), true);
-	}
-	
-	@Test
 	public void testCoinReturn()
 			throws DisabledException, CapacityExceededException
 	{
@@ -107,9 +94,20 @@ public class EndToEndTest {
 		hardware.getSelectionButton(1).press();
 		
 		String log = ((MockDisplay)hardware.getDisplay()).getLog();
-		System.out.println("DISPLAY LOG: " + log);
 		
 		assertTrue(log.contains("OUT OF STOCK"));
 	}
 
+	@Test
+	public void testDisplayErrorWhenInsufficientMoney()
+			throws DisabledException, CapacityExceededException
+	{
+		hardware = new MockHardwareSimulator(coinValues, popCosts, popNames);
+
+		hardware.getSelectionButton(1).press();
+		
+		String log = ((MockDisplay)hardware.getDisplay()).getLog();
+		
+		assertTrue(log.contains("Insufficient funds"));
+	}
 }
