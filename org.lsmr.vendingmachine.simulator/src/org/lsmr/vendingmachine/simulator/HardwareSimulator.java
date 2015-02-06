@@ -60,7 +60,10 @@ public class HardwareSimulator {
     private IndicatorLightSimulator exactChangeLight, outOfOrderLight;
     
     private MoneyManager moneyManager;
+    private ExactChangeManager exactChangeManager;
     private PopSelector popSelectors[];
+    private int[] popCost;
+    private int[] coinValue;
 
     protected static int deliveryChuteCapacity = 20;
     protected static int coinReceptableCapacity = 50;
@@ -97,6 +100,9 @@ public class HardwareSimulator {
 	if(popCosts.length != popNames.length)
 	    throw new SimulationException("Pop costs and names must be of same length");
 
+	popCost = popCosts;
+	coinValue = coinValues;
+	
 	cardSlot = new CardSlotSimulator();
 	display = new DisplaySimulator();
 
@@ -129,6 +135,7 @@ public class HardwareSimulator {
 	outOfOrderLight = new IndicatorLightSimulator();
 	
 	moneyManager = new MoneyManager(this);
+	exactChangeManager = new ExactChangeManager(this);
 	
 	popSelectors = new PopSelector[popNames.length];
 	for(int i = 0; i < popNames.length; i++)				//Make selectors for each button/pop type/pop rack
@@ -301,6 +308,22 @@ public class HardwareSimulator {
 		this.moneyManager = moneyManager;
 	}
 	
+	public ExactChangeManager getExactChangeManager(){
+		return exactChangeManager;
+	}
+	
+	public void setExactChangeManager(ExactChangeManager exactChangeManager){
+		this.exactChangeManager = exactChangeManager;
+	}
+	
+	public int[] getPopCosts(){
+		return popCost;
+	}
+	
+	public int[] getCoinValues(){
+		return coinValue;
+	}
+	
 	public static void main(String [] args) {
 		try {	
 			int [] coinValues = { 5, 10, 25, 100, 200 };
@@ -310,23 +333,33 @@ public class HardwareSimulator {
 			DisplaySimulator disp = hw.getDisplay();
 
 			System.out.println(disp.getMessage());
-			hw.getCoinSlot().addCoin(new Coin(100));
+			hw.getCoinSlot().addCoin(new Coin(25));
+			System.out.println(disp.getMessage());
+			hw.getCoinSlot().addCoin(new Coin(25));
+			System.out.println(disp.getMessage());
+			hw.getCoinSlot().addCoin(new Coin(25));
+			System.out.println(disp.getMessage());
+			hw.getCoinSlot().addCoin(new Coin(10));
+			System.out.println(disp.getMessage());
+			hw.getCoinSlot().addCoin(new Coin(10));
+			System.out.println(disp.getMessage());
+			hw.getCoinSlot().addCoin(new Coin(10));
 			System.out.println(disp.getMessage());
 			
 			//-----------
 			
 			System.out.println("Attempting to dispense a pop from index 1 which is empty. Expecting an exception.");
-			hw.getSelectionButton(1).press();	//Empty, EmptyException
+			hw.buttons[1].press();	//Empty, EmptyException
 			
 			System.out.println("Loading a can of pop into index 1.");
 			PopCan aPop = new PopCan();			//This is a can of pop.
 			hw.getPopCanRack(1).addPop(aPop);	//Load it in.
 			
 			System.out.println("Attempting to dispense a pop from index 0 which is empty. Expecting an exception.");
-			hw.getSelectionButton(0).press();				//Should fail.
+			hw.buttons[0].press();				//Should fail.
 
 			System.out.println("Attempting to dispense a pop from index 1 which should now have a pop in it.");
-			hw.getSelectionButton(1).press();				//Hopefully it dispenses and is not empty.
+			hw.buttons[1].press();				//Hopefully it dispenses and is not empty.
 			
 			//--------------
 			
