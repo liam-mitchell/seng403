@@ -61,6 +61,7 @@ public class HardwareSimulator {
     
     private MoneyManager moneyManager;
     private PopSelector popSelectors[];
+    private MoneyDelivery moneyDelivery;
 
     protected static int deliveryChuteCapacity = 20;
     protected static int coinReceptableCapacity = 50;
@@ -129,6 +130,8 @@ public class HardwareSimulator {
 	outOfOrderLight = new IndicatorLightSimulator();
 	
 	moneyManager = new MoneyManager(this);
+
+    moneyDelivery = new MoneyManager(this);
 	
 	popSelectors = new PopSelector[popNames.length];
 	for(int i = 0; i < popNames.length; i++)				//Make selectors for each button/pop type/pop rack
