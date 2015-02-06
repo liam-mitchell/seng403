@@ -1,10 +1,10 @@
 package org.lsmr.vendingmachine.simulator;
 
-public class MoneyDelivery implements SelectionButtonSimulatorListener
+public class MoneyDelivery implements SelectionButtonSimulatorListener, CoinReceptacleListener
 {
 	private HardwareSimulator hardware;
 	private MoneyManager moneyManager;
-	private CoinReceptacle receptacle;
+	private CoinReceptacleSimulator receptacle;
 	private CoinRackSimulator connectedCoinRack;
 	private int cost;
 
@@ -50,7 +50,7 @@ public class MoneyDelivery implements SelectionButtonSimulatorListener
 				difference = difference - (change * coinValues[i]);
 			}
 		}
-		else if (sum = cost)
+		else if (sum == cost)
 			receptacle.storeCoins();
 		else if (hardware.getExactChangeLight().isActive)
 			hardware.getDisplay().display("Insufficient Funds");
@@ -58,7 +58,36 @@ public class MoneyDelivery implements SelectionButtonSimulatorListener
 		moneyManager.coinsRemoved(receptacle);
 	}
 
+	@Override
+	public void coinAdded(CoinReceptacleSimulator receptacle, Coin coin) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void coinsRemoved(CoinReceptacleSimulator receptacle) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void coinsFull(CoinReceptacleSimulator receptacle) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void enabled(CoinReceptacleSimulator receptacle) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void disabled(CoinReceptacleSimulator receptacle) {
+		// TODO Auto-generated method stub
+
+	}
+	
 	public void returnPressed() {
 		receptacle.returnCoins();
 		moneyManager.coinsRemoved(receptacle)
 	}
+	
+	
