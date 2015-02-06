@@ -87,6 +87,18 @@ public class PopSelector implements SelectionButtonSimulatorListener {
 		{//Else where it falls down where there is insufficient cost.
 			
 			System.out.println("Insufficient coins for pop.");
+			
+			String oldMessage = disp.getMessage();								//Save old message
+			
+			disp.display("$" + Double.toString(( (double)popCost ) / 100) );	//Display price of pop
+			
+			try {	//Wait for 5 seconds
+				Thread.sleep(5000);
+			}
+			catch (Exception eb) {/*Catch all*/}
+			
+			disp.display(oldMessage);		//Restore old message
+			
 		}
 		
 	}
