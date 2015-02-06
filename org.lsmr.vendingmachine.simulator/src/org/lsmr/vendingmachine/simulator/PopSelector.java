@@ -42,8 +42,8 @@ public class PopSelector implements SelectionButtonSimulatorListener {
 	public void pressed(SelectionButtonSimulator button) {
 		// TODO Auto-generated method stub
 		
-		if (moneyManager.getSum() >= popCost)	//Check if we have enough money to dispense the pop.
-		{
+		if (moneyManager.getSum() >= popCost)
+		{//Check if we have enough money to dispense the pop.
 			
 			try
 			{
