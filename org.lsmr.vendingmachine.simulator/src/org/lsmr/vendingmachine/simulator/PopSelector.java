@@ -6,11 +6,18 @@ public class PopSelector implements SelectionButtonSimulatorListener {
 	private MoneyManager moneyManager;				//Money manager for knowing if we have enough money
 	private int indexNumber;						//Index number of the PopSelector (and the button and pop rack it is connected to.);
 	private DisplaySimulator disp;
+	private CoinReceptacleSimulator receptacle;
+	private HardwareSimulator hardware;
+	private CoinRackSimulator connectedCoinRack;
+	private int[] cValues;
 
-	public PopSelector(HardwareSimulator hw, int cost, int index) {
+	public PopSelector(HardwareSimulator hw, int[] coinValues, int cost, int index) {
 		connectedPopRack = hw.getPopCanRack(index);		//Link this to the associated pop rack
 		hw.getSelectionButton(index).register(this);	//Register to appropriate button
 		disp = hw.getDisplay();
+		receptacle = hw.getCoinReceptacle();
+		hardware = hw;
+		cValues = coinValues;
 		
 		popCost = cost;									//Cost of this pop
 		moneyManager = hw.getMoneyManager();			//Get the money manager
@@ -47,6 +54,30 @@ public class PopSelector implements SelectionButtonSimulatorListener {
 			
 			try
 			{
+				int sum = moneyManager.getSum();
+				int difference;
+				int change;
+				if (hardware.getOutOfOrderLight().isActive()) {
+					moneyManager.coinsRemoved(receptacle);
+				}
+				else if (moneyManager.getSum() > popCost) {
+					receptacle.storeCoins();
+					difference = sum - popCost;
+					for (int i = hardware.getNumberOfCoinRacks() - 1; i >= 0; i--) {
+						connectedCoinRack = hardware.getCoinRack(i);
+						change = difference/cValues[i];
+						for (int j = 0; j < change; j++)
+							connectedCoinRack.releaseCoin();
+						difference = difference - (change * cValues[i]);
+					}
+				}
+				else if (sum == popCost)
+					receptacle.storeCoins();
+				else if (hardware.getExactChangeLight().isActive())
+					hardware.getDisplay().display("Insufficient Funds");
+				
+				moneyManager.coinsRemoved(receptacle);
+			
 				connectedPopRack.dispensePop();	//Try to dispense the pop
 				
 				System.out.println("Pop successfully dispensed from index " + indexNumber);
@@ -83,8 +114,7 @@ public class PopSelector implements SelectionButtonSimulatorListener {
 				e.printStackTrace();
 			}
 		}
-		else
-		{//Else where it falls down where there is insufficient cost.
+		else {//Else where it falls down where there is insufficient cost.
 			
 			System.out.println("Insufficient coins for pop.");
 			
