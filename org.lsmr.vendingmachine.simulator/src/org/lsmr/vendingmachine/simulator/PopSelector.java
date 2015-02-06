@@ -45,18 +45,24 @@ public class PopSelector implements SelectionButtonSimulatorListener {
 		disp = hardware.getDisplay();
 		// TODO Auto-generated method stub
 		
-		if (moneyManager.getSum() >= popCost)	//Check if we have enough money
-		{
-			try {
+		if (moneyManager.getSum() >= popCost)
+		{//Check if we have enough money to dispense the pop.
+			
+			try
+			{
 				connectedPopRack.dispensePop();	//Try to dispense the pop
 				
 				System.out.println("Pop successfully dispensed from index " + indexNumber);
-			} catch (DisabledException e) {
-				// TODO Auto-generated catch block
+			}
+			catch (DisabledException e)
+			{//Catch exception for pop rack being disabled.
+				
 				System.out.println("DisabledException in PopSelector while dispensing pop from index " + indexNumber);
 				e.printStackTrace();
-			} catch (EmptyException e) {
-				// TODO Auto-generated catch block
+			}
+			catch (EmptyException e)
+			{//Catch exception for when pop rack selected does not have pop, i.e. it is empty/out of stock.
+				
 				System.out.println("EmptyException in PopSelector while dispensing pop from index " + indexNumber);
 				//e.printStackTrace();
 				
@@ -72,15 +78,30 @@ public class PopSelector implements SelectionButtonSimulatorListener {
 				disp.display(oldMessage);		//Restore old message
 				System.out.println(disp.getMessage());
 				
-			} catch (CapacityExceededException e) {
-				// TODO Auto-generated catch block
+			}
+			catch (CapacityExceededException e)
+			{//Catch exception for exceeding capacity. I think when too many pops are loaded into the rack.
+				
 				System.out.println("CapacityExceededException in PopSelector while dispensing pop from index " + indexNumber);
 				e.printStackTrace();
 			}
 		}
 		else
-		{
+		{//Else where it falls down where there is insufficient cost.
+			
 			System.out.println("Insufficient coins for pop.");
+			
+			String oldMessage = disp.getMessage();								//Save old message
+			
+			disp.display("$" + Double.toString(( (double)popCost ) / 100) );	//Display price of pop
+			
+			try {	//Wait for 4 seconds
+				Thread.sleep(4000);
+			}
+			catch (Exception eb) {/*Catch all*/}
+			
+			disp.display(oldMessage);		//Restore old message
+			
 		}
 		
 	}
