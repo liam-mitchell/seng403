@@ -92,8 +92,8 @@ public class PopSelector implements SelectionButtonSimulatorListener {
 			
 			disp.display("$" + Double.toString(( (double)popCost ) / 100) );	//Display price of pop
 			
-			try {	//Wait for 5 seconds
-				Thread.sleep(5000);
+			try {	//Wait for 4 seconds
+				Thread.sleep(4000);
 			}
 			catch (Exception eb) {/*Catch all*/}
 			
