@@ -49,7 +49,8 @@ public class ButtonPopTest extends SelectionButtonSimulator {
 	@Test
 	public void test_1_ES_LoadPopAndDispense() {
 		try
-		{
+		{//Load a pop into machine and attempt to dispense it. Should work correctly.
+			
 			System.out.println("Start Test 1\n");
 			
 			System.out.println("Inserting coin.");
@@ -75,7 +76,8 @@ public class ButtonPopTest extends SelectionButtonSimulator {
 	@Test
 	public void test_2_EF_AttemptEmptyDispense() {
 		try
-		{
+		{//Attempting to dispense a pop from an empty machine. Nothing should come out.
+			
 			System.out.println("Start Test 2\n");
 			
 			System.out.println("Inserting coin.");
@@ -84,7 +86,7 @@ public class ButtonPopTest extends SelectionButtonSimulator {
 			System.out.println("Attempting to dispense a pop from index 1 which is empty. Expecting an exception.");
 			hw.getSelectionButton(1).press();			//Empty, EmptyException*/
 
-			assertEquals(1, hw.getDeliveryChute().removeItems().length);	//We should actually get 0 pops. This should fail.
+			assertEquals(0, hw.getDeliveryChute().removeItems().length);	//We should get 0 pops.
 			
 			System.out.println("\nEnd Test 2\n");
 			
@@ -94,7 +96,8 @@ public class ButtonPopTest extends SelectionButtonSimulator {
 	@Test
 	public void test_3_EF_AttemptWrongDispense() {
 		try
-		{
+		{//Load a pop into one rack and then attempt to dispense form another. Nothing should come out.
+			
 			System.out.println("Start Test 3\n");
 			
 			System.out.println("Inserting coin.");
@@ -108,7 +111,7 @@ public class ButtonPopTest extends SelectionButtonSimulator {
 			System.out.println("Attempting to dispense a pop from index 0 which is still empty. Expecting an exception.");
 			hw.getSelectionButton(0).press();			//Should fail.
 			
-			assertEquals(1, hw.getDeliveryChute().removeItems().length);	//We should actually get 0 pops. This should fail.
+			assertEquals(0, hw.getDeliveryChute().removeItems().length);	//We should get 0 pops.
 			
 			System.out.println("\nEnd Test 3\n");
 			
@@ -118,7 +121,8 @@ public class ButtonPopTest extends SelectionButtonSimulator {
 	@Test
 	public void test_4_EF_AttemptInsufficientCoins() {
 		try
-		{
+		{//Attempting to dispense a pop with no coins in machine.
+			
 			System.out.println("Start Test 4\n");
 			
 			System.out.println("Loading a can of pop into index 1.");
@@ -127,7 +131,7 @@ public class ButtonPopTest extends SelectionButtonSimulator {
 			System.out.println("Attempting to dispense a pop from index 0 which is still empty. Expecting insufficient coins.");
 			hw.getSelectionButton(0).press();			//Should fail.
 			
-			assertEquals(1, hw.getDeliveryChute().removeItems().length);	//We should actually get 0 pops. This should fail.
+			assertEquals(0, hw.getDeliveryChute().removeItems().length);	//We should get 0 pops.
 			
 			System.out.println("\nEnd Test 4\n");
 			
