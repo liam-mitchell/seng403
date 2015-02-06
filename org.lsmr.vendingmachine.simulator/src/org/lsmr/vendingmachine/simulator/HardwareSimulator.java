@@ -61,7 +61,7 @@ public class HardwareSimulator {
     
     private MoneyManager moneyManager;
     private PopSelector popSelectors[];
-    private MoneyDelivery moneyDelivery;
+    private MoneyDelivery moneyDelivery[];
 
     protected static int deliveryChuteCapacity = 20;
     protected static int coinReceptableCapacity = 50;
@@ -131,8 +131,10 @@ public class HardwareSimulator {
 	
 	moneyManager = new MoneyManager(this);
 
-    moneyDelivery = new MoneyManager(this);
-	
+    moneyDelivery = new MoneyDelivery[popNames.length];
+	for(int i = 0; i < popNames.length; i++)				//Make selectors for each button/pop type/pop rack
+		popSelectors[i] = new PopSelector(this, popCosts[i], i);	//Connect them to the appropriate rack
+    
 	popSelectors = new PopSelector[popNames.length];
 	for(int i = 0; i < popNames.length; i++)				//Make selectors for each button/pop type/pop rack
 		popSelectors[i] = new PopSelector(this, popCosts[i], i);	//Connect them to the appropriate rack

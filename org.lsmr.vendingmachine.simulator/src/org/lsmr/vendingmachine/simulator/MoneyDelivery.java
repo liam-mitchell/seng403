@@ -1,30 +1,39 @@
 package org.lsmr.vendingmachine.simulator;
 
-import java.text.NumberFormat
-public class MoneyDelivery
-	implements SelectionButtonSimulatorListener, CoinReceptacle, MoneyManager, PopSelector
+public class MoneyDelivery implements SelectionButtonSimulatorListener
 {
 	private HardwareSimulator hardware;
 	private MoneyManager moneyManager;
-	private PopSelector popSelector;
 	private CoinReceptacle receptacle;
 	private CoinRackSimulator connectedCoinRack;
+	private int cost;
 
-	public MoneyDelivery(HardwareSimulator hw) {
+	public MoneyDelivery(HardwareSimulator hw, int pcost, int index) {
 		hardware = hw;
+		cost = pcost;
 		hardware.getCoinReceptacle().register(this);
 		receptacle = hardware.getCoinReceptacle();
 		moneyManager = hardware.getMoneyManager();
 
-		for (i = 0; i < hardware.getNumberOfSelectionButtons(); i++) {
-			hardware.getSelectionButton(i).register(this);
-		}
+		hw.getSelectionButton(index).register(this);	//Register to appropriate button
+		
+	}
+	
+	@Override
+	public void enabled(AbstractHardware<AbstractHardwareListener> hardware) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void disabled(AbstractHardware<AbstractHardwareListener> hardware) {
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override
 	public void pressed(SelectionButtonSimulator button) {
 		int sum = moneyManager.getSum();
-		int cost = popSelector.getPopCost();
 		int difference;
 		int change;
 		if (hardware.getOutOfOrderLight().isActive) {
