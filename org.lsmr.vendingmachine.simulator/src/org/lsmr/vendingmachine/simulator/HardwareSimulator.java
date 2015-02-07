@@ -148,7 +148,7 @@ public class HardwareSimulator {
 	
 	popSelectors = new PopSelector[popNames.length];
 	for(int i = 0; i < popNames.length; i++)				//Make selectors for each button/pop type/pop rack
-		popSelectors[i] = new PopSelector(this, popCosts[i], i);	//Connect them to the appropriate rack
+		popSelectors[i] = new PopSelector(this, coinValues, popCosts[i], i);	//Connect them to the appropriate rack
     }
 
     /**
